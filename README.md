@@ -1,92 +1,197 @@
-# 📦 Pydantic for Python Developers
+# Data Validation with Pydantic
 
-A hands-on tutorial repository for learning Pydantic from basics to advanced validation techniques used in modern Python applications, FastAPI services, and Machine Learning APIs.
+A hands-on repository demonstrating the core features of **Pydantic v2** for data validation, serialization, computed fields, and model design in Python.
 
-## 📖 About
-
-This repository contains practical examples demonstrating how to use Pydantic for:
-
-* Data validation
-* Type checking
-* Serialization and deserialization
-* API request validation
-* Environment configuration management
-* Nested models
-* Custom validators
-* Production-grade data handling
-
-Pydantic is widely used in FastAPI and modern Python applications to ensure data integrity and improve developer productivity.
+This repository is intended for beginners and intermediate developers who want to learn how Pydantic can be used to create robust, type-safe applications with minimal code.
 
 ---
 
-## 🚀 What You'll Learn
+## What is Pydantic?
 
-* Creating Pydantic models
-* Field validation
-* Optional and default values
-* Nested models
-* Custom validators
-* Model serialization
-* Model inheritance
-* Settings management
-* Working with JSON data
-* Integrating Pydantic with FastAPI
+Pydantic is a Python library that uses type hints to perform data validation, parsing, and serialization automatically.
 
----
+It helps developers:
 
-## 🛠 Tech Stack
-
-* Python 3.11+
-* Pydantic v2
-* FastAPI
-* Uvicorn
-* Pytest
+* Validate incoming data
+* Convert data types automatically
+* Enforce constraints on fields
+* Create nested data structures
+* Serialize objects into JSON and dictionaries
+* Build reliable APIs with FastAPI
 
 ---
 
-## 📂 Project Structure
+## Topics Covered
 
-```bash
-pydantic-tutorials/
-│
-├── tutorials/
-│   ├── 01_basics/
-│   ├── 02_field_types/
-│   ├── 03_optional_fields/
-│   ├── 04_nested_models/
-│   ├── 05_custom_validators/
-│   ├── 06_serialization/
-│   ├── 07_settings_management/
-│   ├── 08_model_inheritance/
-│   └── 09_fastapi_integration/
-│
-├── examples/
-│   ├── user_schema.py
-│   ├── product_schema.py
-│   └── config_schema.py
-│
+### 1. Why Pydantic?
+
+File: `pydantic-need.py`
+
+Learn:
+
+* Problems with manual validation
+* Type safety
+* Automatic type conversion
+* Cleaner and more maintainable code
+
+---
+
+### 2. Field Validators
+
+File: `field-validators.py`
+
+Learn:
+
+* Custom field validation
+* Data transformation
+* Domain-specific validation
+* Validation modes (`before` and `after`)
+
+Example:
+
+```python
+@field_validator("email")
+@classmethod
+def validate_email(cls, value):
+    ...
+```
+
+---
+
+### 3. Model Validators
+
+File: `model-validations.py`
+
+Learn:
+
+* Validation across multiple fields
+* Interdependent field checks
+* Business logic validation
+
+Example:
+
+```python
+@model_validator(mode="after")
+def validate_emergency_contact(self):
+    ...
+```
+
+---
+
+### 4. Nested Models
+
+File: `nested-models.py`
+
+Learn:
+
+* Composing models inside other models
+* Deep validation
+* Structured data representation
+
+Example:
+
+```python
+class Address(BaseModel):
+    city: str
+
+class Patient(BaseModel):
+    address: Address
+```
+
+---
+
+### 5. Computed Fields
+
+File: `computed-fields.py`
+
+Learn:
+
+* Dynamically calculated properties
+* Derived values
+* Using `@computed_field`
+* Using `@property`
+
+Example:
+
+```python
+@computed_field
+@property
+def bmi(self):
+    return self.weight / (self.height ** 2)
+```
+
+---
+
+### 6. Serialization
+
+File: `serialisation.py`
+
+Learn:
+
+* Converting models to dictionaries
+* Converting models to JSON
+* Exporting validated data
+
+Examples:
+
+```python
+patient.model_dump()
+```
+
+```python
+patient.model_dump_json()
+```
+
+---
+
+## Project Structure
+
+```text
+.
+├── computed-fields.py
+├── field-validators.py
+├── model-validations.py
+├── nested-models.py
+├── pydantic-need.py
+├── serialisation.py
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## ⚡ Installation
+## Installation
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/pydantic-tutorials.git
+git clone https://github.com/HarshRaj4343/Data-Validation---Pydantic.git
+```
 
-cd pydantic-tutorials
+Move into the project directory:
+
+```bash
+cd Data-Validation---Pydantic
 ```
 
 Create a virtual environment:
 
 ```bash
 python -m venv venv
+```
 
+Activate the environment:
+
+### macOS/Linux
+
+```bash
 source venv/bin/activate
+```
+
+### Windows
+
+```bash
+venv\Scripts\activate
 ```
 
 Install dependencies:
@@ -97,114 +202,57 @@ pip install -r requirements.txt
 
 ---
 
-## ▶️ Running Examples
+## Key Pydantic Concepts
 
-Navigate to a tutorial:
+| Concept         | Purpose                            |
+| --------------- | ---------------------------------- |
+| BaseModel       | Base class for all Pydantic models |
+| Field           | Add constraints and metadata       |
+| field_validator | Validate individual fields         |
+| model_validator | Validate multiple fields together  |
+| computed_field  | Create derived fields              |
+| model_dump      | Convert model to dictionary        |
+| model_dump_json | Convert model to JSON              |
+| EmailStr        | Email validation                   |
+| AnyUrl          | URL validation                     |
+
+---
+
+## Requirements
+
+* Python 3.10+
+* Pydantic v2
+
+Install manually:
 
 ```bash
-cd tutorials/01_basics
-```
-
-Run the example:
-
-```bash
-python main.py
+pip install pydantic
+pip install email-validator
 ```
 
 ---
 
-## 🧩 Example: Basic Pydantic Model
+## Learning Outcome
 
-```python
-from pydantic import BaseModel
+After completing this repository, you will be able to:
 
-class Student(BaseModel):
-    name: str
-    age: int
-    cgpa: float
-
-student = Student(
-    name="Harsh",
-    age=19,
-    cgpa=8.7
-)
-
-print(student)
-```
-
-Output:
-
-```text
-name='Harsh' age=19 cgpa=8.7
-```
+* Build strongly typed data models
+* Perform custom data validation
+* Create nested schemas
+* Implement business logic validations
+* Generate computed fields
+* Serialize models efficiently
+* Prepare for FastAPI development
 
 ---
 
-## ✅ Validation Example
+## References
 
-```python
-from pydantic import BaseModel
-
-class User(BaseModel):
-    username: str
-    age: int
-
-user = User(
-    username="john_doe",
-    age="25"
-)
-```
-
-Pydantic automatically converts compatible data types whenever possible.
+* Pydantic Documentation: https://docs.pydantic.dev
+* FastAPI Documentation: https://fastapi.tiangolo.com
 
 ---
 
-## 🎯 Learning Outcomes
+## License
 
-After completing these tutorials, you will be able to:
-
-* Build robust data models
-* Validate user input safely
-* Handle API requests efficiently
-* Create reusable schemas
-* Manage application configuration
-* Integrate Pydantic with FastAPI projects
-* Write cleaner and more maintainable Python code
-
----
-
-## 📚 Prerequisites
-
-* Basic Python knowledge
-* Understanding of classes and objects
-* Familiarity with JSON is helpful
-
----
-
-## 🔥 Real-World Use Cases
-
-* FastAPI request validation
-* Machine Learning input schemas
-* Configuration management
-* Data pipelines
-* ETL workflows
-* Backend services
-* Agentic AI systems
-* RAG applications
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome.
-
-If you find a bug, have a suggestion, or want to add new examples, feel free to open an issue or submit a pull request.
-
----
-
-## ⭐ Support
-
-If this repository helped you learn Pydantic, consider giving it a star.
-
-Happy coding!
-# Data-Validation---Pydantic
+This repository is intended for educational purposes and personal learning.
